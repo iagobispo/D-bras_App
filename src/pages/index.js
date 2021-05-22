@@ -3,11 +3,14 @@ import { Text,TouchableOpacity } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 import  AntDesign  from 'react-native-vector-icons/AntDesign'
 import  MaterialIcons  from 'react-native-vector-icons/MaterialIcons';
-MaterialIcons.loadFont();
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import  Ionicons  from 'react-native-vector-icons/Ionicons';
+
+MaterialIcons.loadFont();
 
 
 
@@ -24,16 +27,20 @@ import AddProduto from '../pages/pagesLojas/addProduto';
 import Detail from '../pages/detailsProduct';
 import Produto from '../pages/pagesLojas/produtos'; //pagina para listar produtos 
 import RegisterLoja from '../pages/registerLojas';
+import Favorites from '../pages/favorites';
+import EditProduto from '../pages/pagesLojas/editProduto';
+import Compras from '../pages/compras';
+import Cart from '../pages/cart';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function Favorite() {
-	const cartLength = useSelector((state) => state.cart.length);
-	return (
-		<Text>{cartLength}</Text>
-	)
-}
+// function Favorite() {
+	
+// 	return (
+// 		<Text>{cartLength}</Text>
+// 	)
+// }
 
 // function PrivateRouter({component:Component, ...rest}) {
 // 	<Route {...rest} render={props => (
@@ -42,25 +49,32 @@ function Favorite() {
 // }
 const tabHomeNavigation = () => {
 	const { isAuthenticated } = useSelector(state => state.auth)
+	const favoriteLength = useSelector(state => state.favoriteHeart.length);
 
 	return (
 		<Tab.Navigator
 			tabBarOptions={{
 				style: {
-					paddingVertical: 3,
-					backgroundColor: 'black'
+					paddingVertical: 4,
+					backgroundColor: '#fff',
+					borderTopWidth: 0.5,
+					borderTopColor: '#424242',
+					 
+					height: 51
+
 				},
-				inactiveTintColor: '#bbb',
-				activeTintColor: '#fff',
+				inactiveTintColor: '#42424290' ,
+				activeTintColor: 'black',
 				labelStyle: {
-					fontSize: 10
+					fontSize: 10,
+					paddingBottom: 5
 				}
 			}}
 		>
 
 			<Tab.Screen
 				options={{
-					tabBarIcon: ({ color }) => <AntDesign name="home" size={20} color={color} />
+					tabBarIcon: ({ color }) => <AntDesign name="home" size={20} color='#424242' />
 				}}
 				name='Home'
 				component={Home}
@@ -71,27 +85,29 @@ const tabHomeNavigation = () => {
 					tabBarIcon: ({ color }) =>
 						<>
 							{/* <Amount left='60%' top='10%' length={<Favorite/>} /> */}
-							<Amount left='60%' top='10%' length='0' />
-							<MaterialIcons name="favorite-border" size={20} color={color} />
+							<Amount left='60%' top='10%' length={favoriteLength} />
+							<MaterialIcons name="favorite-border" size={20} color='#424242'  />
 						</>
 				}}
 				name="Favoritos"
-				component={Login}
+				component={Favorites}
 			/>
 
-			{!isAuthenticated && (
+			{isAuthenticated && (
 				<Tab.Screen
+					
 					options={{
-						tabBarIcon: ({ color }) => <MaterialIcons name="account-circle" size={20} color={color} />
+						tabBarIcon: ({ color }) => <MaterialCommunityIcons name="shopping-outline" size={20} color='#424242' />
 					}}
-					name="Login"
-					component={Login}
+					name="Minhas compras"
+					component={Compras}
+					
 				/>
 			)}
 
 			<Tab.Screen
 				options={{
-					tabBarIcon: ({ color }) => <Ionicons name="options-outline" size={20} color={color} />
+					tabBarIcon: ({ color }) => <Ionicons name="options-outline" size={20} color='#424242'  />
 				}}
 				name="Mais"
 				component={Options}
@@ -110,11 +126,15 @@ function App() {
 				screenOptions={{ headerShown: false }}
 			>
 				<Stack.Screen name="Home" component={tabHomeNavigation} />
+				<Stack.Screen name="Login" component={Login} />
 				<Stack.Screen name="SingUp" component={SingUp} />
 				<Stack.Screen name="Produto" component={Produto} />
 				<Stack.Screen name="AddProduto" component={AddProduto} />
 				<Stack.Screen name="Detail" component={Detail} />
 				<Stack.Screen name="RegisterLoja" component={RegisterLoja} />
+				<Stack.Screen name="EditProdut" component={EditProduto} />
+				<Stack.Screen name="Cart" component={Cart} />
+				
 			</Stack.Navigator>
 		</NavigationContainer>
 	);
@@ -122,5 +142,8 @@ function App() {
 
 export default App;
 
-
-//<Text style={{ fontSize: 23, color: '#fff', fontWeight: 'bold' }}>Shoppging Brás</Text>
+const styles = EStyleSheet.create({
+	containerFooter: {
+		backgroundColor: '$white'
+	}
+})

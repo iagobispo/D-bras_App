@@ -13,18 +13,18 @@ export const allProdutos = () => { //buscar todos os produtos da plataforma
     }
 }
 
- 
+
 
 export const produtosUsuario = (props) => {   //buscar todos os produtos com o id da loja
-    return async  dispatch => {
+    return async dispatch => {
         try {
 
             const response = await api.get(`/produtos/todos/idloja?loja=${props}`)
-            const {produtos} = await response.data
-            const {docs} = await response.data.produtos
-             dispatch(await addProdutosLoja([produtos,docs]))
+            const { produtos } = await response.data
+            const { docs } = await response.data.produtos
+            dispatch(await addProdutosLoja([produtos, docs]))
             //console.log(response.data.produtos)
-           console.log(docs)
+            console.log(docs)
 
         } catch (err) {
             return ('erro')
@@ -34,22 +34,43 @@ export const produtosUsuario = (props) => {   //buscar todos os produtos com o i
 
 
 export const criarProduto = (props) => {   //buscar todos os produtos com o id da loja
-    return async  dispatch => {
+    return async dispatch => {
         try {
             const storagedToken = await asyncStorage.getItem('@RNAuth:token');
-            api.defaults.headers.authorization = await `Bearer ${storagedToken}`;    
+            api.defaults.headers.authorization = await `Bearer ${storagedToken}`;
 
             const id = await asyncStorage.getItem('@RNAuth:lojaId')
 
             const response = await api.post(`/produtos/?loja=${id}`, props)
 
-            return(response)
+            return (response)
 
         } catch (err) {
             console.log(err.response.data.errors)
         }
     }
 }
+
+export const addPhotos = async (props) => {   //buscar todos os produtos com o id da loja
+    try {
+        const storagedToken = await asyncStorage.getItem('@RNAuth:token');
+        api.defaults.headers.authorization = await `Bearer ${storagedToken}`;
+
+        const id = await asyncStorage.getItem('@RNAuth:lojaId')
+
+
+        const response = await api.put(`/produtos/images/${props.idProduto}/?loja=${id}`, props.formData)
+        console.log(response)
+        return (response)
+
+        //console.log(props.files._parts[0])
+
+
+    } catch (err) {
+        console.log(err.response)
+    }
+}
+
 
 
 

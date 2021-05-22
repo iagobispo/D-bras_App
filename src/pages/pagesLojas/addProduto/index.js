@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import {
     View,
@@ -14,16 +15,18 @@ import {
 import  MaterialIcons  from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 
-//import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import { allCategories } from '../../../store/searches/fetchCategorias';
-import { criarProduto } from '../../../store/searches/fetchProdutos';
+import { criarProduto, addPhotos } from '../../../store/searches/fetchProdutos';
+
 
 import { useSelector, useDispatch } from 'react-redux'
 
 import Header from '../../../components/header';
 import styles from './styles';
 
+import imageLogo from '../../../assets/image/logo.png';
 
 function AddProduct() {
     const [selectedImage, setSelectedImage] = useState(null);
@@ -51,12 +54,20 @@ function AddProduct() {
     const [categoria, setCategoria] = useState('');
 
     const [idProduto, setIdProduto] = useState(null);
+    const [img, setImg] = useState(false)
 
-    // ImagePicker.openPicker({
-    //     multiple: true
-    //   }).then(images => {
-    //     console.log(images);
-    //   });
+    function image() {
+        ImagePicker.openPicker({
+          width: 300,
+          height: 300,
+          multiple: true,
+          cropping: true
+        }).then(images => {
+          console.log(...images);
+          setImg(images)
+        });
+      }
+
 
     function navigateToHomePage() { //funçao para voltar a pagina 
         navigation.navigate('Home')
@@ -101,6 +112,7 @@ function AddProduct() {
         if (resposta.status === 200) {
             setshowContainerAddPhotos(true)
             setShowContainerAddProduct(false)
+
         }
 
 
@@ -118,31 +130,51 @@ function AddProduct() {
 
         dispatch(allCategories());
 
-    }, [dispatch])
+    }, [dispatch]);
+
+
+
+    async function addPhotoProduct() {
+        
+        const formData = new FormData();
+        formData.append('files', {
+            uri: img[0].path,//Your Image File Path
+            type: img[0].mime,
+            name: img[0].modificationDate,
+        });
+
+        const props = await {formData, idProduto}
+                    
+        //const resposta = await dispatch(addPhotos(props))
+        const resposta = await addPhotos(props)
+        //console.log(props.formData)
+
+    }
 
 
 
 
     return (
         <>
-            <Header title='Adicionar Produtos' />
+            <Header title='Criar produto' arrowLeft />
 
             <View style={{ flex: 1, }} >
 
                 {// opçoes para escolher a categoria
                     showCategoria &&
                     <View style={styles.container}>
-                        <View style={styles.containerOptions}>
-                            <Text style={styles.textTitleOptions}>Escolha a categoria</Text>
-                        </View>
+                        <Text style={{marginTop: 36, fontSize: 16, fontWeight: 'bold', color:'#424242'}}>Escolha a categoria do seu produto</Text>
 
                         <FlatList
+                            style={{backgroundColor: '#c4c4c490-', width: '100%', borderRadius: 5, marginBottom: 50, paddingHorizontal: 10, paddingTop: 50, marginTop: 36}}
                             showsVerticalScrollIndicator={false}
                             data={categorias}
                             keyExtractor={(item) => String(item._id)}
                             renderItem={({ item }) => <TouchableOpacity
                                 onPress={function test() { hideCategoria(item) }}>
-                                <Text style={{ fontSize: 33, marginTop: 10 }}>{item.nome}</Text>
+                                <View style={{width: '100%', alignItems: 'center', justifyContent: 'center', height: 40, borderBottomWidth: 1}}>
+                                    <Text style={{ fontSize: 16}}>{item.nome}</Text>
+                                </View>
                             </TouchableOpacity>}
                         />
                     </View>
@@ -150,22 +182,29 @@ function AddProduct() {
 
                 {showContainerAddProduct &&
                     <>
-                        {/* <View style={{ alignItems: 'center' }}>
-                             <Text style={{ color: 'black', fontSize: 11 }}>{categoria}</Text> 
-                        </View> */}
 
-                        <KeyboardAvoidingView style={{ alignItems: 'center', flex: 1, justifyContent: 'space-evenly' }}>
+                        <KeyboardAvoidingView style={{ alignItems: 'center', flex: 1, justifyContent: 'space-evenly', backgroundColor: '#fff' }}>
 
-                            <View style = {{width: '80%'}}>
+                            <Image
+                            source={imageLogo}
+                            style={{width: 80, height: 80}}
+                            />
+                            
+                            <Text style={{color: '#424242'}}> 
+                                Preencha os campos com as {'\n'}
+                                informações do seu produto.
+                            </Text>
+
+                            <View style = {{width: '90%'}}>
                                 <TextInput
-                                    style={{ height: 35, backgroundColor: '#fff', borderRadius: 5, marginTop: '10%', paddingLeft: 15 }}
+                                    style={{ height: 50, backgroundColor: '#c2c2c299', borderRadius: 5, marginTop: '10%', paddingLeft: 15 }}
                                     placeholder='Nome...'
                                     value={titulo}
                                     onChangeText={(test) => setTitulo(test)}
                                 />
 
                                 <TextInput
-                                    style={{  height: 35, backgroundColor: '#fff', borderRadius: 5, marginTop: '3%', paddingLeft: 15 }}
+                                    style={{  height: 40, backgroundColor: '#c2c2c299', borderRadius: 5, marginTop: '3%', paddingLeft: 15 }}
                                     placeholder='preço...'
                                     keyboardType='numeric'
                                     value={preco}
@@ -173,7 +212,7 @@ function AddProduct() {
                                 />
 
                                 <TextInput
-                                    style={{ height: 35, backgroundColor: '#fff', borderRadius: 5, marginTop: '3%', paddingLeft: 15 }}
+                                    style={{ height: 40, backgroundColor: '#c2c2c299', borderRadius: 5, marginTop: '3%', paddingLeft: 15 }}
                                     placeholder='Quantidade...'
                                     keyboardType='numeric'
                                     value={quantidade}
@@ -181,27 +220,22 @@ function AddProduct() {
                                 />
 
                                 <TextInput
-                                    style={{ height: 35, backgroundColor: '#fff', borderRadius: 5, marginTop: '3%', paddingLeft: 15 }}
+                                    style={{ height: 40, backgroundColor: '#c2c2c299', borderRadius: 5, marginTop: '3%', paddingLeft: 15 }}
                                     placeholder='Sku'
                                     value={sku}
                                     onChangeText={(test) => setSku(test)}
                                 />
 
-
                                 <TextInput
-                                    style={{ backgroundColor: '#fff', minHeight: 50, borderRadius: 5, marginTop: '3%', paddingLeft: 15 }}
+                                    style={{ backgroundColor: '#c2c2c299', minHeight: 40, borderRadius: 5, marginTop: '3%', paddingLeft: 15 }}
                                     placeholder='Descrição...'
                                     numberOfLines={4}
                                     multiline={true}
                                     value={descricao}
                                     onChangeText={(test) => setDescricao((test).toString())}
                                 />
-                            </View>
 
-
-
-
-                            {selectedImage !== null &&
+                                {selectedImage !== null &&
 
                                 <View style={{ flexDirection: 'row' }}>
                                     < FlatList
@@ -215,35 +249,60 @@ function AddProduct() {
 
                                 </View>
 
-                            }
+                                }
 
+                                <TouchableOpacity style={{ height: 50,marginTop: '6%', alignItems: 'flex-end', justifyContent: 'center', borderRadius: 10, backgroundColor: '#424242', width: '100%', alignItems: 'center' }} onPress={productRegister}>
+                                <Text style={{ color: '#fff', fontSize: 16 }}>Proximo</Text>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity style={{ height: 30, alignItems: 'flex-end', justifyContent: 'center', width: '80%', borderRadius: 10 }} onPress={productRegister}>
-                                <Text style={{ color: 'black', fontSize: 20 }}>Proximo</Text>
-                            </TouchableOpacity>
+                            </View>
 
                         </KeyboardAvoidingView>
 
                     </>
                 }
 
+
                 { showContainerAddPhotos && 
-                    <View style={{flex: 1, backgroundColor: 'red'}}>
-                        <TouchableOpacity onPress={()=>{}}>
-                            <Text>teste</Text>
-                        </TouchableOpacity>
+                    <>
+                    <View style={{  flex: 1, alignItems: 'center', justifyContent: 'space-evenly' }}>
+              
+                      <Text style={{ fontSize: 15 }}>Adicione fotos ao seu produto</Text>
+              
+                      {img && 
+              
+                        <View style={{width: '100%'}}>
+                          <FlatList
+                              style={{paddingHorizontal: 10, width: '100%', alignContent: 'center'}}
+                              showsVerticalScrollIndicator={false}
+                              data={img}
+                              keyExtractor={(item) => String(item.path)}
+                              renderItem={({ item }) => <Image style={{width: 60, height: 60, borderRadius: 10, marginHorizontal: 10}} source={{uri: item.path}}/> }
+                              horizontal={true}
+                          />
+                        </View>
+                      
+                      
+              
+                      }
+              
+                      <TouchableOpacity onPress={() => image()}
+                        style={{ backgroundColor: 'black', width: 100, height: 50, alignItems: 'center', justifyContent: 'center', borderRadius: 40 }}>
+                          <Text style={{color:'#fff'}}>+</Text>
+              
+                      </TouchableOpacity>
+              
+                      <TouchableOpacity onPress={addPhotoProduct}
+                        style={{ backgroundColor: 'black', width: 100, height: 50, alignItems: 'center', justifyContent: 'center', borderRadius: 40 }}>
+                          <Text style={{color:'#fff'}}>enviar</Text>
+              
+                      </TouchableOpacity>
+              
                     </View>
+                  </>
                 }
 
-            </View>
 
-
-            <View style={styles.footer}>
-
-                <TouchableOpacity style={styles.buttonfooter} onPress={navigateToHomePage} >
-                    <MaterialIcons name="cancel" size={20} color='#fff' />
-                    <Text style={styles.textButton}>Cancelar</Text>
-                </TouchableOpacity>
 
             </View>
         </>
@@ -253,5 +312,3 @@ function AddProduct() {
 
 
 export default AddProduct;
-
-

@@ -1,34 +1,46 @@
 import { StatusBar } from 'react-native';
 import React from 'react';
 import { Provider } from 'react-redux';
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
+
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 import store from './src/store';
 
 
 import Paginas from './src/pages/index';
 
-
 export default function App() {
+  EStyleSheet.build({
+    $black: '#000000',
+    $dark: '#424242',
+    $buttonDark90: '#42424299',
+    $silver: '#c8c8c8',
+    $inputSilver: '#c8c8c840',
+    $white: '#ffffff',
+    $buttonWhite90: '#ffffff90',
+    $red: '#ff0505',
+    $green: '#41e6be',
+
+    $small: '0.563rem',
+    $p: '0.75rem',
+    $pmedio: '0.875rem',
+    $span: '1rem',
+    $H3: '1.333rem',
+    $h2: '1.776rem',
+    $h1: '2.368rem'
+})
+  
   return (
     
     <Provider store={store}>
       <Paginas/>
-      <StatusBar translucent backgroundColor='black' />
+      <StatusBar translucent backgroundColor='#fff' hidden />
     </Provider>
     
   );
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

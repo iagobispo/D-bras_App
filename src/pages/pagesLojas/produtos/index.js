@@ -7,7 +7,7 @@ import asyncStorage from '@react-native-community/async-storage';
 
 import { produtosUsuario } from '../../../store/searches/fetchProdutos';
 
-import  Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 Icon.loadFont()
 
 
@@ -33,16 +33,13 @@ function Produto() {
             }
             //console.log(await asyncStorage.getItem('@RNAuth:lojaId'), 'ok')
             const idLoja = await asyncStorage.getItem('@RNAuth:lojaId');
-           await dispatch(produtosUsuario(idLoja))
-           // console.log(idLoja)
+            await dispatch(produtosUsuario(idLoja))
+            // console.log(idLoja)
 
         }
         loadingDados()
-    },[dispatch])
+    }, [dispatch])
 
-    function navigateToHomePage() {
-        navigation.navigate('Home')
-    }
 
     function navigateToAddProdutoPage() {
         navigation.navigate('AddProduto')
@@ -50,21 +47,24 @@ function Produto() {
 
     return (
         <>
-            <Header title='Produtos' />
+            <Header title='Produtos' arrowLeft />
 
             <View style={styles.containerMain}>
                 <View style={styles.containerInput}>
                     <TextInput
-                        style={{ backgroundColor: '#fff', width: '80%', height: 30, textAlign: 'center', borderTopLeftRadius: 8, borderBottomLeftRadius: 8 }}
+                        style={{ backgroundColor: '#c4c4c460', width: '100%', height: 30, borderRadius: 5, paddingVertical: 0, paddingHorizontal: 10 }}
                         placeholder='Encontre o seu produto'
-                    />
+                        keyboardType='web-search'
 
-                    <TouchableOpacity style={styles.buttonSearch}>
-                        <Icon  name="search" size={24} color="#fff" />
-                    </TouchableOpacity>
+                    />
+                        <Icon name="search" size={18} color="#c4c4c4" style={{position: 'absolute', right: 10}} />
+                    
                 </View>
 
-                 <View style={styles.main}>
+                <Text>Total de itens ()</Text>
+
+
+                <View style={styles.main}>
                     <FlatList
                         showsVerticalScrollIndicator={false}
                         data={produtosLoja[1]}
@@ -74,28 +74,12 @@ function Produto() {
 
                 </View>
 
-
-
-                {/* <TouchableOpacity style={{width: 100, height: 200, backgroundColor: 'red'}} onPress={()=>{
-                    console.log(produtosLoja[0])
-                }}>
-                </TouchableOpacity> */}
-
-            </View>
-
-            <View style={styles.footer}>
-
-                <TouchableOpacity style={styles.buttonfooter} onPress={navigateToHomePage}>
-                    <Icon name="keyboard-backspace" size={20} color='#fff' />
-                    <Text style={styles.textButton}>Voltar</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.buttonfooter} onPress={navigateToAddProdutoPage}>
-                    <Icon name="add-circle-outline" size={20} color="#fff" />
-                    <Text style={styles.textButton}>Adicionar</Text>
+                <TouchableOpacity style={{width: 50, height: 50, borderRadius: 50, backgroundColor: '#41e6be', alignItems: 'center', justifyContent: 'center', position: 'absolute', bottom: 30,  right: 30}} onPress={navigateToAddProdutoPage}>
+                    <Icon name="add" size={28} color="#fff" />
                 </TouchableOpacity>
 
             </View>
+
         </>
     )
 }

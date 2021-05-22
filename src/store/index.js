@@ -6,6 +6,7 @@ import rootCategorias from './ducks/categorias';
 import rootCart from './ducks/cart';
 import rootUsuario from './ducks/user';
 import rootAuth from './ducks/auth';
+import rootFavorite from './ducks/favoriteHeart'
 
 
 export default configureStore({
@@ -16,6 +17,7 @@ export default configureStore({
         cart: rootCart,
         user: rootUsuario,
         auth: rootAuth,
+        favoriteHeart: rootFavorite,
     }
 })
 

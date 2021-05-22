@@ -1,19 +1,20 @@
-import { StyleSheet } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     container:{
         backgroundColor: 'yellow',
     },
     containerProduct:{
-        height: 100,
-        margin: 10,
+        height: 70,
+        marginBottom: 10,
+        
         //backgroundColor: 'yellow',
         borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 8,
-        flexDirection: 'row',
+        borderRadius: 5,
+        flexDirection: 'row', 
         alignItems: 'center',
-        justifyContent:'space-between'   
+        justifyContent:'space-between', 
     },
 
     containerButtons:{
@@ -23,26 +24,32 @@ const styles = StyleSheet.create({
     containerText:{
         flex: 2,
         justifyContent: 'space-between',
-        height: 100,
-        paddingVertical: 10,
+        height: 70,
         paddingLeft: 15
     },
 
     textTitle:{
         fontWeight:'bold',
-        fontSize: 18
+        fontSize: '$pmedio',
+        color: '$dark'
+    },
+    textDescription:{
+        fontWeight:'bold',
+        fontSize: '$p',
+        color: '$silver'
     },
     textPrice:{
         fontWeight: 'bold',
-        fontSize: 15
+        fontSize: '$pmedio',
+        fontWeight: 'bold',
+        color: '$dark'
     },
 
     buttonEdit:{
         paddingRight: 15,
-        backgroundColor: 'black',
-        height: 98,
-        borderTopRightRadius:8,
-        borderBottomRightRadius: 8,
+        height: 70,
+        borderTopRightRadius:5,
+        borderBottomRightRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
         width: 45,
@@ -51,14 +58,14 @@ const styles = StyleSheet.create({
 
     containerImage:{
         height: '100%',
-        width: 100
+        width: 70
     },
 
     image:{
         height: '100%',
         resizeMode: 'contain',
-        borderBottomLeftRadius: 8,
-        borderTopLeftRadius: 8
+        borderBottomLeftRadius: 5,
+        borderTopLeftRadius: 5
     }
 })
 

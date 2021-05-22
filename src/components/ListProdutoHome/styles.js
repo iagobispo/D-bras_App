@@ -1,6 +1,6 @@
-import {StyleSheet} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
 
     container:{
         backgroundColor: '#fff',
@@ -12,20 +12,27 @@ const styles = StyleSheet.create({
         
     },
 
+    containerImage:{
+        width: '95%', 
+        height: '11.125rem', 
+        //backgroundColor: 'red',
+        justifyContent: 'center'
+    },
+
     containerProdutos:{
-       //backgroundColor:'yellow',
+      // backgroundColor:'yellow',
         //maxWidth: '50%',
         width: '50%',
         alignItems: 'center',
-        marginTop: 15,
-        //backgroundColor: 'yellow'
+        marginBottom: 15,
+        // backgroundColor: 'yellow',
+        //borderWidth: 1
     },
 
     imageProduto:{
-        height: 150,
-        resizeMode: 'contain',
-        marginBottom: 10,
-        borderRadius: 20
+        height: '95%',
+        resizeMode: 'cover',
+        borderRadius: 5
         
     },
 
@@ -36,24 +43,30 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         maxWidth: 400,
-        paddingHorizontal:20,
-        paddingTop: 10
+       
+    },
+
+    containerText:{
+        width: '95%',
+        //backgroundColor: 'red'
     },
 
     nameText:{
-        fontSize: 20,   
+        fontSize: '$p', 
+        color: '$dark',
+        paddingTop: '0.188rem'
+    },
+
+    descriptionText:{
+        fontSize: '$p', 
+        color: '$silver' 
     },
 
     priceText:{
-        fontWeight: '700'
-    },
-
-
-    buttonTextCompar:{
-        backgroundColor: 'black',
-       // padding:8,
-        color:'#fff'
-        
+        fontSize: '$span',
+        fontWeight: 'bold',
+        paddingTop: '0.3rem',
+        color: '$dark'
     },
 
     containerCompra:{
@@ -66,9 +79,10 @@ const styles = StyleSheet.create({
         
     },
 
-    imageCarPlus:{
-        height: 30,
-        width: 30
+    iconCarPlus:{
+        fontSize: 20,
+        paddingTop: '0.3rem',
+        color: '$dark'
     }
 
     
